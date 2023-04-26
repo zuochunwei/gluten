@@ -312,7 +312,7 @@ std::shared_ptr<ResultIterator> VeloxBackend::GetResultIterator(
   getInfoAndIds(subVeloxPlanConverter_->splitInfos(), veloxPlan_->leafPlanNodeIds(), scanInfos, scanIds, streamIds);
 
   auto veloxPool = AsWrappedVeloxAggregateMemoryPool(allocator, memPoolOptions_);
-  auto ctxPool = veloxPool->addLeafChild("result_iterator");
+  auto ctxPool = veloxPool->addAggregateChild("result_iterator");
   auto wholestageIter = std::make_unique<WholeStageResultIteratorFirstStage>(
       ctxPool, veloxPlan_, scanIds, setScanInfos, streamIds, "/tmp/test-spill", confMap_);
   return std::make_shared<ResultIterator>(std::move(wholestageIter), shared_from_this());
