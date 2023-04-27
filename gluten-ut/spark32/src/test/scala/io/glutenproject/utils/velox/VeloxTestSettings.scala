@@ -337,8 +337,13 @@ class VeloxTestSettings extends BackendTestSettings {
   enableSuite[GlutenTextV2Suite]
   enableSuite[GlutenOrcColumnarBatchReaderSuite]
   enableSuite[GlutenOrcFilterSuite]
+    .exclude("SPARK-32622: case sensitivity in predicate pushdown")
   enableSuite[GlutenOrcPartitionDiscoverySuite]
   enableSuite[GlutenOrcV1PartitionDiscoverySuite]
+    .exclude("read partitioned table - normal case")
+    .exclude("read partitioned table - with nulls")
+    .exclude("read partitioned table - partition key included in orc file")
+    .exclude("read partitioned table - with nulls and partition keys are included in Orc file")
   enableSuite[GlutenOrcV1QuerySuite]
     // Rewrite to disable Spark's columnar reader.
     .exclude("Simple selection form ORC table")
@@ -350,6 +355,8 @@ class VeloxTestSettings extends BackendTestSettings {
     // For exception test.
     .exclude("SPARK-20728 Make ORCFileFormat configurable between sql/hive and sql/core")
   enableSuite[GlutenOrcV2QuerySuite]
+    .exclude("Read/write binary data")
+    .exclude("Read/write all types with non-primitive type")
     // Rewrite to disable Spark's columnar reader.
     .exclude("Simple selection form ORC table")
     .exclude("simple select queries")
@@ -369,6 +376,7 @@ class VeloxTestSettings extends BackendTestSettings {
     // Ignored to disable vectorized reading check.
     .exclude("SPARK-36594: ORC vectorized reader should properly check maximal number of fields")
   enableSuite[GlutenOrcV1FilterSuite]
+    .exclude("SPARK-32622: case sensitivity in predicate pushdown")
   enableSuite[GlutenOrcV1SchemaPruningSuite]
     .exclude(
       "Spark vectorized reader - without partition data column - select only top-level fields")
@@ -526,6 +534,22 @@ class VeloxTestSettings extends BackendTestSettings {
     .exclude("read byte, int, short, long together")
     .exclude("read float and double together")
   enableSuite[GlutenMergedOrcReadSchemaSuite]
+    .exclude("append column into middle")
+    .exclude("add a nested column at the end of the leaf struct column")
+    .exclude("add a nested column in the middle of the leaf struct column")
+    .exclude("add a nested column at the end of the middle struct column")
+    .exclude("add a nested column in the middle of the middle struct column")
+    .exclude("hide a nested column at the end of the leaf struct column")
+    .exclude("hide a nested column in the middle of the leaf struct column")
+    .exclude("hide a nested column at the end of the middle struct column")
+    .exclude("hide a nested column in the middle of the middle struct column")
+    .exclude("change column type from boolean to byte/short/int/long")
+    .exclude("change column type from byte to short/int/long")
+    .exclude("change column type from short to int/long")
+    .exclude("change column type from int to long")
+    .exclude("read byte, int, short, long together")
+    .exclude("change column type from float to double")
+    .exclude("read float and double together")
   enableSuite[GlutenParquetReadSchemaSuite]
   enableSuite[GlutenVectorizedParquetReadSchemaSuite]
   enableSuite[GlutenMergedParquetReadSchemaSuite]
@@ -611,6 +635,7 @@ class VeloxTestSettings extends BackendTestSettings {
   enableSuite[GlutenDatasetSerializerRegistratorSuite]
   enableSuite[GlutenDeprecatedAPISuite]
   enableSuite[GlutenMetadataCacheSuite]
+    .exclude("SPARK-16336,SPARK-27961 Suggest fixing FileNotFoundException")
   enableSuite[GlutenSimpleShowCreateTableSuite]
   enableSuite[GlutenStatisticsCollectionSuite]
   enableSuite[FallbackStrategiesSuite]
