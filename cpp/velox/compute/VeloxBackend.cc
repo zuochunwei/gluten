@@ -297,27 +297,6 @@ std::shared_ptr<ResultIterator> VeloxBackend::GetResultIterator(
   }
 }
 
-// Used by unit test and benchmark.
-std::shared_ptr<ResultIterator> VeloxBackend::GetResultIterator(
-    MemoryAllocator* allocator,
-    const std::vector<std::shared_ptr<velox::substrait::SplitInfo>>& setScanInfos) {
-  toVeloxPlan();
-
-  // In test, use setScanInfos to replace the one got from Substrait.
-  std::vector<std::shared_ptr<velox::substrait::SplitInfo>> scanInfos;
-  std::vector<velox::core::PlanNodeId> scanIds;
-  std::vector<velox::core::PlanNodeId> streamIds;
-
-  // Separate the scan ids and stream ids, and get the scan infos.
-  getInfoAndIds(subVeloxPlanConverter_->splitInfos(), veloxPlan_->leafPlanNodeIds(), scanInfos, scanIds, streamIds);
-
-  auto veloxPool = AsWrappedVeloxAggregateMemoryPool(allocator, memPoolOptions_);
-  auto ctxPool = veloxPool->addAggregateChild("result_iterator");
-  auto wholestageIter = std::make_unique<WholeStageResultIteratorFirstStage>(
-      ctxPool, veloxPlan_, scanIds, setScanInfos, streamIds, "/tmp/test-spill", confMap_);
-  return std::make_shared<ResultIterator>(std::move(wholestageIter), shared_from_this());
-}
-
 arrow::Result<std::shared_ptr<ColumnarToRowConverter>> VeloxBackend::getColumnar2RowConverter(
     MemoryAllocator* allocator,
     std::shared_ptr<ColumnarBatch> cb) {
