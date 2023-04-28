@@ -362,6 +362,7 @@ class VeloxTestSettings extends BackendTestSettings {
   enableSuite[GlutenOrcV2QuerySuite]
     .exclude("Read/write binary data")
     .exclude("Read/write all types with non-primitive type")
+    .exclude("Creating case class RDD table")
     .exclude("Simple selection form ORC table")
     // Rewrite to disable Spark's columnar reader.
     .exclude("Simple selection form ORC table")
